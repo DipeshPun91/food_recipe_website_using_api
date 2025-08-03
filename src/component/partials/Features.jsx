@@ -1,4 +1,5 @@
 import React from "react";
+import { FaBolt, FaUtensils, FaMedal } from "react-icons/fa";
 
 const Features = () => {
   return (

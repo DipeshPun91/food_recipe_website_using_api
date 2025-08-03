@@ -1,139 +1,56 @@
 import React from "react";
-import {
-  FaSearch,
-  FaPlus,
-  FaBolt,
-  FaUtensils,
-  FaMedal,
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+import { FaSearch } from "react-icons/fa";
 import Header from "./component/partials/Header";
 import Footer from "./component/partials/Footer";
 import Menu from "./component/partials/Menu";
+import Features from "./component/partials/Features";
+import Testimonials from "./component/partials/Testimonials";
+import Cta from "./component/partials/Cta";
 
 const App = () => {
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
       <Header />
 
-      {/* Hero Section */}
       <section
         id="home"
-        className="pt-32 pb-20 bg-gradient-to-r from-red-50 to-orange-50"
+        className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 via-orange-50 to-amber-50 py-20 px-4"
       >
-        <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-            Delicious Food Delivered To Your Doorstep
-          </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto mb-10">
-            Order from your favorite restaurants with just a few clicks and
-            enjoy premium quality food in the comfort of your home.
-          </p>
-          <div className="flex max-w-xl mx-auto bg-white rounded-full shadow-md overflow-hidden">
-            <input
-              type="text"
-              placeholder="Search for restaurants or dishes..."
-              className="flex-grow px-6 py-4 focus:outline-none"
-              readOnly
-            />
-            <button className="bg-red-500 text-white px-6 flex items-center hover:bg-red-600 transition">
-              <FaSearch className="mr-2" /> Search
-            </button>
-          </div>
-        </div>
-      </section>
+        <div className="container mx-auto text-center">
+          <div className="max-w-4xl mx-auto">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              Restaurant-Quality Meals <br className="hidden md:block" />
+              <span className="text-red-600">Delivered</span> To Your Door
+            </h1>
 
-      {/* Menu Section */}
-      <section id="menu" className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              Our Delicious Menu
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Explore our wide variety of dishes prepared by top chefs using the
-              freshest ingredients
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10">
+              Discover gourmet dining experiences from top local chefs, prepared
+              fresh and delivered fast to your home or office.
             </p>
-          </div>
 
-          {/* Category Filters */}
-          <div className="flex flex-wrap justify-center gap-3 mb-10">
-            {["all", "pizza", "burger", "pasta", "salad", "dessert"].map(
-              (category) => (
-                <button
-                  key={category}
-                  className={`px-6 py-2 rounded-full capitalize ${
-                    category === "all"
-                      ? "bg-red-500 text-white"
-                      : "bg-white text-gray-700 border border-gray-200 hover:border-red-300"
-                  }`}
-                >
-                  {category === "all" ? "All Items" : category + "s"}
-                </button>
-              )
-            )}
-          </div>
-
-          {/* Food Items Grid */}
-          <Menu />
-        </div>
-      </section>
-
-      {/* Features Section */}
-      
-
-      {/* Testimonials */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Hear from people who have enjoyed our delicious food and excellent
-              service
-            </p>
-          </div>
-
-          <div className="max-w-3xl mx-auto bg-white p-8 rounded-lg shadow-sm text-center">
-            <p className="text-lg italic text-gray-700 mb-8 relative">
-              <span className="text-red-500 text-4xl absolute top-0 left-0 opacity-30">
-                "
-              </span>
-              The food arrived hot and fresh, exactly as described on the menu.
-              The flavors were incredible and the portion was generous. I'll
-              definitely be ordering again!
-              <span className="text-red-500 text-4xl absolute bottom-0 right-0 opacity-30">
-                "
-              </span>
-            </p>
-            <p className="font-semibold">Sarah Johnson</p>
-            <p className="text-gray-500 text-sm">Regular Customer</p>
+            <div className="flex flex-col sm:flex-row max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl">
+              <input
+                type="text"
+                placeholder="Search for restaurants, dishes, or cuisines..."
+                className="flex-grow px-6 py-5 focus:outline-none text-gray-700 placeholder-gray-400"
+              />
+              <button className="bg-red-600 hover:bg-red-700 text-white px-8 py-5 flex items-center justify-center transition-colors duration-300">
+                <span className="hidden sm:inline mr-2">Find Food</span>
+                <FaSearch className="text-lg" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-red-500 to-orange-500 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-6">
-            Ready to enjoy delicious food?
-          </h2>
-          <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Download our app now and get 20% off your first order with code
-            WELCOME20
-          </p>
-          <button className="bg-white text-red-500 px-8 py-3 rounded-full font-bold hover:bg-gray-100 transition">
-            Download App
-          </button>
-        </div>
-      </section>
+      <Menu />
 
-      {/* Footer */}
+      <Features />
+
+      <Testimonials />
+
+      <Cta />
+
       <Footer />
     </div>
   );
