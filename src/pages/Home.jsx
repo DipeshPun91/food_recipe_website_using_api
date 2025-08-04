@@ -1,5 +1,5 @@
 import React from "react";
-import Menu from "../component/partials/Menu";
+import Menu from "../component/home/Menu";
 import Features from "../component/home/Features";
 import Testimonials from "../component/home/Testimonials";
 import Cta from "../component/home/Cta";

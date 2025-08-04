@@ -11,7 +11,6 @@ const Header = () => {
           Recipe<span className="text-amber-600">Hub</span>
         </h1>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center space-x-6 lg:space-x-8">
           <Link
             to="/"
@@ -39,7 +38,6 @@ const Header = () => {
           </Link>
         </nav>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gray-700 focus:outline-none"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -60,7 +58,6 @@ const Header = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <div
         className={`md:hidden ${
           mobileMenuOpen ? "block" : "hidden"

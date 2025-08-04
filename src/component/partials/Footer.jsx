@@ -20,7 +20,6 @@ const Footer = () => {
     <footer className="bg-gray-900 text-white pt-16 pb-8">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-          {/* About Column */}
           <div>
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <FaUtensils className="text-green-500 mr-2" />
@@ -51,7 +50,6 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Quick Links Column */}
           <div>
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <FaBookOpen className="text-green-500 mr-2" />
@@ -78,7 +76,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Community Column */}
           <div>
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <FaUserFriends className="text-green-500 mr-2" />
@@ -108,7 +105,6 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Contact Column */}
           <div>
             <h3 className="text-xl font-bold mb-4 flex items-center">
               <FaEnvelope className="text-green-500 mr-2" />
