@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   return (
@@ -8,30 +9,27 @@ const Header = () => {
           Gourmet<span className="text-orange-500">Express</span>
         </h1>
         <nav className="hidden md:flex items-center space-x-8">
-          <a
-            href="#home"
-            className="text-gray-700 hover:text-red-500 font-medium"
-          >
+          <Link to="/" className="text-gray-700 hover:text-red-500 font-medium">
             Home
-          </a>
-          <a
-            href="#menu"
+          </Link>
+          <Link
+            to="/#menu" // For section links, you can use hash like this
             className="text-gray-700 hover:text-red-500 font-medium"
           >
             Menu
-          </a>
-          <a
-            href="#about"
+          </Link>
+          <Link
+            to="/about"
             className="text-gray-700 hover:text-red-500 font-medium"
           >
             About
-          </a>
-          <a
-            href="#contact"
+          </Link>
+          <Link
+            to="/#contact"
             className="text-gray-700 hover:text-red-500 font-medium"
           >
             Contact
-          </a>
+          </Link>
           <button className="bg-red-500 text-white px-6 py-2 rounded-full font-medium hover:bg-red-600 transition">
             Order Now
           </button>
