@@ -4,6 +4,7 @@ import Header from "./component/partials/Header";
 import Footer from "./component/partials/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Recipe from "./pages/Recipe";
 
 const App = () => {
   return (
@@ -13,6 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
+          <Route path="/recipes" element={<Recipe />} />
         </Routes>
       </main>
       <Footer />
