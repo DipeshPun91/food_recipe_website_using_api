@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { useNavigate } from "react-router-dom";
 
 const Menu = () => {
   const [foodItems, setFoodItems] = useState([]);
@@ -21,8 +22,7 @@ const Menu = () => {
   const sliderRef = useRef(null);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMeals = async () => {
@@ -141,8 +141,7 @@ const Menu = () => {
   };
 
   const handleRecipeClick = (recipe) => {
-    setSelectedRecipe(recipe);
-    setIsDialogOpen(true);
+    navigate(`/recipes/${recipe.idMeal}`);
   };
 
   return (
@@ -157,7 +156,6 @@ const Menu = () => {
         </p>
       </div>
 
-      {/* Search and Filter Section */}
       <div className="mb-12 p-6 bg-green-50 rounded-xl">
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="flex-1 relative">
@@ -208,7 +206,6 @@ const Menu = () => {
         </div>
       </div>
 
-      {/* Loading State */}
       {loading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {[...Array(6)].map((_, index) => (
@@ -223,7 +220,6 @@ const Menu = () => {
         </div>
       )}
 
-      {/* Error State */}
       {error && !loading && (
         <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg max-w-3xl mx-auto">
           <div className="flex items-start">
@@ -251,7 +247,6 @@ const Menu = () => {
         </div>
       )}
 
-      {/* No Results State */}
       {!loading && !error && filteredItems.length === 0 && (
         <div className="text-center py-16 bg-white rounded-xl shadow-sm border border-gray-100 max-w-3xl mx-auto">
           <svg
@@ -277,10 +272,8 @@ const Menu = () => {
         </div>
       )}
 
-      {/* Recipe Grid */}
       {!loading && !error && filteredItems.length > 0 && (
         <div className="relative">
-          {/* Navigation Arrows */}
           <button
             onClick={prevSlide}
             className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 bg-white p-3 rounded-full shadow-md hover:bg-green-100 transition"
@@ -296,7 +289,6 @@ const Menu = () => {
             <FaChevronRight className="text-green-600 text-lg" />
           </button>
 
-          {/* Slider */}
           <div
             className="overflow-hidden"
             onTouchStart={handleTouchStart}
@@ -362,7 +354,6 @@ const Menu = () => {
             </div>
           </div>
 
-          {/* Slider Indicators */}
           <div className="flex justify-center mt-8 space-x-2">
             {groupedItems.map((_, index) => (
               <button
@@ -374,128 +365,6 @@ const Menu = () => {
                 aria-label={`Go to slide ${index + 1}`}
               />
             ))}
-          </div>
-        </div>
-      )}
-
-      {/* Recipe Detail Modal */}
-      {isDialogOpen && selectedRecipe && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true"
-              onClick={() => setIsDialogOpen(false)}
-            >
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full z-50 relative">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <div className="sm:flex sm:items-start">
-                  <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
-                    <div className="flex justify-between items-start">
-                      <h3 className="text-2xl leading-6 font-bold text-gray-900 mb-4">
-                        {selectedRecipe.strMeal}
-                      </h3>
-                      <button
-                        onClick={() => setIsDialogOpen(false)}
-                        className="text-gray-400 hover:text-gray-500"
-                      >
-                        <span className="sr-only">Close</span>
-                        <svg
-                          className="h-6 w-6"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="M6 18L18 6M6 6l12 12"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="md:col-span-1">
-                        <img
-                          src={selectedRecipe.strMealThumb}
-                          alt={selectedRecipe.strMeal}
-                          className="w-full h-auto rounded-lg"
-                        />
-                        <div className="mt-4 flex flex-wrap gap-2">
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                            <FaUtensils className="mr-1.5" />
-                            {selectedRecipe.strCategory}
-                          </span>
-                          <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
-                            <FaGlobeAmericas className="mr-1.5" />
-                            {selectedRecipe.strArea}
-                          </span>
-                        </div>
-                        {selectedRecipe.strYoutube && (
-                          <a
-                            href={selectedRecipe.strYoutube}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="mt-4 w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
-                          >
-                            <FaYoutube className="mr-2" />
-                            Watch on YouTube
-                          </a>
-                        )}
-                      </div>
-
-                      <div className="md:col-span-2">
-                        <div className="mb-6">
-                          <h4 className="text-lg font-medium text-gray-900 mb-2">
-                            Ingredients
-                          </h4>
-                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {Array.from({ length: 20 }).map((_, i) => {
-                              const ingredient =
-                                selectedRecipe[`strIngredient${i + 1}`];
-                              const measure =
-                                selectedRecipe[`strMeasure${i + 1}`];
-                              if (ingredient && ingredient.trim() !== "") {
-                                return (
-                                  <li key={i} className="text-sm text-gray-700">
-                                    <span className="font-medium">
-                                      {ingredient}
-                                    </span>
-                                    : {measure}
-                                  </li>
-                                );
-                              }
-                              return null;
-                            })}
-                          </ul>
-                        </div>
-
-                        <div>
-                          <h4 className="text-lg font-medium text-gray-900 mb-2">
-                            Instructions
-                          </h4>
-                          <div className="prose max-w-none text-gray-700">
-                            {selectedRecipe.strInstructions
-                              .split("\r\n")
-                              .map((paragraph, i) => (
-                                <p key={i} className="mb-4">
-                                  {paragraph}
-                                </p>
-                              ))}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       )}
