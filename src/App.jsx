@@ -5,6 +5,7 @@ import Footer from "./component/partials/Footer";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Recipe from "./pages/Recipe";
+import RecipeDetail from "./pages/RecipeDetail";
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/recipes" element={<Recipe />} />
+          <Route path="/recipes/:id" element={<RecipeDetail />} />
         </Routes>
       </main>
       <Footer />
