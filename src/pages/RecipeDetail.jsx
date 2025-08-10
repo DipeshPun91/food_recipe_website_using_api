@@ -5,7 +5,12 @@ import {
   FaUtensils,
   FaGlobeAmericas,
   FaArrowLeft,
+  FaHeart,
+  FaClock,
+  FaUserFriends,
 } from "react-icons/fa";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -41,16 +46,37 @@ const RecipeDetail = () => {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center py-16">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded w-1/4 mx-auto mb-6"></div>
-            <div className="h-96 bg-gray-200 rounded-lg mb-6"></div>
-            <div className="space-y-4">
-              <div className="h-4 bg-gray-200 rounded w-3/4 mx-auto"></div>
-              <div className="h-4 bg-gray-200 rounded w-1/2 mx-auto"></div>
-              <div className="h-4 bg-gray-200 rounded w-2/3 mx-auto"></div>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="mb-6">
+          <Skeleton width={100} height={24} />
+        </div>
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="p-6">
+            <div className="flex flex-col md:flex-row gap-6 mb-8">
+              <Skeleton height={240} width={240} className="rounded-lg" />
+              <div className="flex-1">
+                <Skeleton height={32} width="70%" className="mb-4" />
+                <div className="flex gap-3 mb-4">
+                  <Skeleton width={80} height={24} />
+                  <Skeleton width={80} height={24} />
+                </div>
+                <div className="flex flex-wrap gap-4 mb-4">
+                  <Skeleton width={100} height={20} />
+                  <Skeleton width={100} height={20} />
+                </div>
+                <Skeleton width={150} height={36} />
+              </div>
             </div>
+            <Skeleton height={24} width="30%" className="mb-3" />
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {[...Array(8)].map((_, i) => (
+                <Skeleton key={i} height={20} />
+              ))}
+            </div>
+            <Skeleton height={24} width="30%" className="mb-3" />
+            {[...Array(5)].map((_, i) => (
+              <Skeleton key={i} height={16} className="mb-2" />
+            ))}
           </div>
         </div>
       </div>
@@ -59,12 +85,12 @@ const RecipeDetail = () => {
 
   if (error) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 rounded-lg max-w-3xl mx-auto">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-red-50 border-l-4 border-red-500 p-6 rounded-lg">
           <div className="flex items-start">
             <div className="flex-shrink-0 pt-0.5">
               <svg
-                className="h-5 w-5 text-red-500"
+                className="h-6 w-6 text-red-500"
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
@@ -77,19 +103,19 @@ const RecipeDetail = () => {
               </svg>
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">
+              <h3 className="text-lg font-medium text-red-800">
                 Error loading recipe
               </h3>
-              <p className="text-sm text-red-700 mt-1">{error}</p>
+              <p className="text-gray-700 mt-2">{error}</p>
+              <button
+                onClick={() => navigate(-1)}
+                className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                <FaArrowLeft className="mr-2" />
+                Back to Recipes
+              </button>
             </div>
           </div>
-          <button
-            onClick={() => navigate(-1)}
-            className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          >
-            <FaArrowLeft className="mr-2" />
-            Back to Recipes
-          </button>
         </div>
       </div>
     );
@@ -97,14 +123,14 @@ const RecipeDetail = () => {
 
   if (!recipe) {
     return (
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="text-center py-16">
-          <h3 className="text-xl font-medium text-gray-900">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="text-center py-12">
+          <h3 className="text-xl font-medium text-gray-900 mb-4">
             Recipe not found
           </h3>
           <button
             onClick={() => navigate(-1)}
-            className="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
           >
             <FaArrowLeft className="mr-2" />
             Back to Recipes
@@ -115,106 +141,115 @@ const RecipeDetail = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center text-green-600 hover:text-green-700 mb-6"
+        className="flex items-center text-green-600 hover:text-green-700 mb-6 transition-colors"
       >
         <FaArrowLeft className="mr-2" />
         Back to Recipes
       </button>
 
-      <div className="bg-white rounded-xl shadow-sm overflow-hidden">
-        <div className="md:flex">
-          <div className="md:w-1/3">
-            <img
-              src={recipe.strMealThumb}
-              alt={recipe.strMeal}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.src =
-                  "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
-                e.target.className = "w-full h-full object-cover";
-              }}
-            />
-          </div>
-          <div className="p-8 md:w-2/3">
-            <h1 className="text-3xl font-bold text-gray-900 mb-4">
-              {recipe.strMeal}
-            </h1>
-
-            <div className="flex flex-wrap gap-2 mb-6">
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                <FaUtensils className="mr-1.5" />
-                {recipe.strCategory}
-              </span>
-              <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
-                <FaGlobeAmericas className="mr-1.5" />
-                {recipe.strArea}
-              </span>
+      <div className="bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="p-6">
+          {/* Header Section - Horizontal Layout */}
+          <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <div className="relative w-full md:w-64 h-64 flex-shrink-0">
+              <img
+                src={recipe.strMealThumb}
+                alt={recipe.strMeal}
+                className="w-full h-full object-cover rounded-lg"
+                onError={(e) => {
+                  e.target.src =
+                    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
+                  e.target.className = "w-full h-full object-cover rounded-lg";
+                }}
+              />
             </div>
 
-            {recipe.strYoutube && (
-              <a
-                href={recipe.strYoutube}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center px-4 py-2 mb-6 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700"
-              >
-                <FaYoutube className="mr-2" />
-                Watch on YouTube
-              </a>
-            )}
+            <div className="flex-1">
+              <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                {recipe.strMeal}
+              </h1>
 
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">
-                Ingredients
-              </h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {Array.from({ length: 20 }).map((_, i) => {
-                  const ingredient = recipe[`strIngredient${i + 1}`];
-                  const measure = recipe[`strMeasure${i + 1}`];
-                  if (ingredient && ingredient.trim() !== "") {
-                    return (
-                      <li key={i} className="flex items-start">
-                        <span className="inline-block bg-green-100 text-green-800 rounded-full p-1 mr-2">
-                          <svg
-                            className="h-3 w-3"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path
-                              fillRule="evenodd"
-                              d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-                              clipRule="evenodd"
-                            />
-                          </svg>
-                        </span>
-                        <span className="text-gray-700">
-                          {measure} {ingredient}
-                        </span>
-                      </li>
-                    );
-                  }
-                  return null;
-                })}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">
-                Instructions
-              </h2>
-              <div className="prose max-w-none text-gray-700">
-                {recipe.strInstructions
-                  .split("\r\n")
-                  .filter((para) => para.trim() !== "")
-                  .map((paragraph, i) => (
-                    <p key={i} className="mb-4">
-                      {paragraph}
-                    </p>
-                  ))}
+              <div className="flex flex-wrap gap-2 mb-3">
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
+                  <FaUtensils className="mr-1.5" />
+                  {recipe.strCategory}
+                </span>
+                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
+                  <FaGlobeAmericas className="mr-1.5" />
+                  {recipe.strArea}
+                </span>
               </div>
+
+              <div className="flex flex-wrap gap-4 mb-4">
+                <div className="flex items-center text-sm text-gray-600">
+                  <FaClock className="mr-1.5 text-green-600" />
+                  <span>30 mins</span>
+                </div>
+                <div className="flex items-center text-sm text-gray-600">
+                  <FaUserFriends className="mr-1.5 text-green-600" />
+                  <span>4 servings</span>
+                </div>
+              </div>
+
+              {recipe.strYoutube && (
+                <a
+                  href={recipe.strYoutube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                >
+                  <FaYoutube className="mr-2" />
+                  Watch on YouTube
+                </a>
+              )}
+            </div>
+          </div>
+
+          <div className="mb-8">
+            <h2 className="text-xl font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">
+              Ingredients
+            </h2>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              {Array.from({ length: 20 }).map((_, i) => {
+                const ingredient = recipe[`strIngredient${i + 1}`];
+                const measure = recipe[`strMeasure${i + 1}`];
+                if (ingredient && ingredient.trim() !== "") {
+                  return (
+                    <li key={i} className="flex items-start text-sm">
+                      <span className="inline-flex items-center justify-center h-5 w-5 rounded-full bg-green-100 text-green-800 text-xs mr-2 mt-0.5 flex-shrink-0">
+                        {i + 1}
+                      </span>
+                      <span className="text-gray-700">
+                        <span className="font-medium">{measure}</span>{" "}
+                        {ingredient}
+                      </span>
+                    </li>
+                  );
+                }
+                return null;
+              })}
+            </ul>
+          </div>
+
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900 mb-3 pb-2 border-b border-gray-100">
+              Instructions
+            </h2>
+            <div className="prose prose-sm max-w-none text-gray-700">
+              {recipe.strInstructions
+                .split("\r\n")
+                .filter((para) => para.trim() !== "")
+                .map((paragraph, i) => (
+                  <div key={i} className="mb-4">
+                    <h3 className="text-base font-medium text-gray-900 mb-1">
+                      Step {i + 1}
+                    </h3>
+                    <p className="text-gray-700 leading-relaxed">{paragraph}</p>
+                  </div>
+                ))}
             </div>
           </div>
         </div>
