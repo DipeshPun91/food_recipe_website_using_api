@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaUtensils, FaGlobeAmericas, FaArrowRight } from "react-icons/fa";
+import {
+  FaUtensils,
+  FaGlobeAmericas,
+  FaArrowRight,
+  FaHeart,
+} from "react-icons/fa";
 import { Link } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -32,13 +37,13 @@ const RecipePreview = () => {
   }, []);
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="text-center mb-12">
-        <h2 className="text-3xl font-bold text-gray-900 mb-3">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl font-bold text-gray-900 mb-4">
           <span className="text-green-600">Popular</span> Recipes
         </h2>
         <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-          Discover our most loved recipes from around the world
+          Discover culinary treasures from around the world
         </p>
       </div>
 
@@ -85,49 +90,53 @@ const RecipePreview = () => {
 
       {!loading && !error && recipes.length > 0 && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {recipes.map((recipe) => (
               <div
                 key={recipe.idMeal}
-                className="bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col border border-gray-100"
+                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden flex flex-col border border-gray-100 group"
               >
-                <div className="relative h-56 overflow-hidden">
+                <div className="relative h-64 overflow-hidden">
                   <img
                     src={recipe.strMealThumb}
                     alt={recipe.strMeal}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     onError={(e) => {
                       e.target.src =
                         "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
                       e.target.className = "w-full h-full object-cover";
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-xl font-bold text-white line-clamp-2">
-                      {recipe.strMeal}
-                    </h3>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-center mt-2">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white backdrop-blur-sm">
+                        <FaUtensils className="mr-1.5" />
+                        {recipe.strCategory}
+                      </span>
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/20 text-white backdrop-blur-sm ml-2">
+                        <FaGlobeAmericas className="mr-1.5" />
+                        {recipe.strArea}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="p-6 flex-1 flex flex-col">
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                      <FaUtensils className="mr-1.5" />
-                      {recipe.strCategory}
-                    </span>
-                    <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
-                      <FaGlobeAmericas className="mr-1.5" />
-                      {recipe.strArea}
-                    </span>
-                  </div>
+                  <h3 className="text-2xl font-bold text-gray-600 line-clamp-2 mb-2">
+                    {recipe.strMeal}
+                  </h3>
 
-                  <Link
-                    to={`/recipes/${recipe.idMeal}`}
-                    className="mt-auto inline-flex items-center text-green-600 hover:text-green-700 font-medium transition-colors"
-                  >
-                    View Recipe <FaArrowRight className="ml-2" />
-                  </Link>
+                  <div className="mt-auto pt-4 border-t border-gray-100">
+                    <Link
+                      to={`/recipes/${recipe.idMeal}`}
+                      className="inline-flex items-center justify-between w-full text-green-600 hover:text-green-700 font-medium transition-colors group-hover:underline"
+                    >
+                      <span>View Full Recipe</span>
+                      <FaArrowRight className="ml-2 transition-transform group-hover:translate-x-1" />
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}
@@ -136,7 +145,7 @@ const RecipePreview = () => {
           <div className="text-center">
             <Link
               to="/recipes"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-colors"
+              className="inline-flex items-center justify-center px-8 py-4 border border-transparent text-base font-medium rounded-lg shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition-all hover:shadow-md"
             >
               Explore All Recipes
             </Link>
