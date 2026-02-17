@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   FaUser,
@@ -8,17 +8,60 @@ import {
   FaClock,
   FaHeart,
   FaStar,
+  FaEdit,
+  FaLink,
 } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
+import { apiRequest } from "../services/api";
 import defaultAvatar from "../assets/default_user.png";
 
 const Profile = () => {
-  const { currentUser, logout } = useContext(AuthContext);
+  const { currentUser, logout, updateUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+  const [formData, setFormData] = useState({
+    username: currentUser?.username || "",
+    email: currentUser?.email || "",
+    avatar: currentUser?.avatar || "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [previewAvatar, setPreviewAvatar] = useState(currentUser?.avatar || "");
 
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+
+    // Update preview when avatar URL changes
+    if (name === "avatar") {
+      setPreviewAvatar(value);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const res = await apiRequest.put(`/user/${currentUser._id}`, formData);
+      updateUser(res.data.data);
+      setIsEditing(false);
+      setError("");
+    } catch (error) {
+      setError(error.response?.data?.message || "Failed to update profile");
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   if (!currentUser) {
@@ -44,24 +87,36 @@ const Profile = () => {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden">
           <div className="bg-green-600 px-6 py-8">
-            <div className="flex items-center space-x-4">
-              <div className="relative">
-                <img
-                  src={currentUser.avatar || defaultAvatar}
-                  alt={currentUser.username}
-                  className="w-20 h-20 rounded-full object-cover border-4 border-white"
-                />
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-4">
+                <div className="relative">
+                  <img
+                    src={currentUser.avatar || defaultAvatar}
+                    alt={currentUser.username}
+                    className="w-20 h-20 rounded-full object-cover border-4 border-white"
+                    onError={(e) => {
+                      e.target.src = defaultAvatar;
+                    }}
+                  />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold text-white">
+                    {currentUser.username}
+                  </h1>
+                  <p className="text-green-100">{currentUser.email}</p>
+                  <p className="text-green-200 text-sm mt-1">
+                    Member since{" "}
+                    {new Date(currentUser.createdAt).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h1 className="text-2xl font-bold text-white">
-                  {currentUser.username}
-                </h1>
-                <p className="text-green-100">{currentUser.email}</p>
-                <p className="text-green-200 text-sm mt-1">
-                  Member since{" "}
-                  {new Date(currentUser.createdAt).toLocaleDateString()}
-                </p>
-              </div>
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-white text-green-600 px-4 py-2 rounded-lg font-medium hover:bg-green-50 transition-colors flex items-center"
+              >
+                <FaEdit className="mr-2" />
+                Edit Profile
+              </button>
             </div>
           </div>
 
@@ -160,6 +215,140 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      {/* Edit Profile Modal */}
+      {isEditing && (
+        <div className="fixed inset-0 bg-transparent backdrop-blur-lg flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-bold text-gray-900">Edit Profile</h2>
+              <button
+                onClick={() => setIsEditing(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="p-6">
+              {error && (
+                <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
+                  {error}
+                </div>
+              )}
+
+              {/* Avatar Preview */}
+              <div className="mb-6 flex flex-col items-center">
+                <img
+                  src={previewAvatar || defaultAvatar}
+                  alt="Profile preview"
+                  className="w-24 h-24 rounded-full object-cover border-4 border-gray-200"
+                  onError={(e) => {
+                    e.target.src = defaultAvatar;
+                  }}
+                />
+              </div>
+
+              {/* Avatar URL Field */}
+              <div className="mb-4">
+                <label
+                  htmlFor="avatar"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Profile Image URL
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaLink className="text-gray-400" />
+                  </div>
+                  <input
+                    type="url"
+                    id="avatar"
+                    name="avatar"
+                    value={formData.avatar}
+                    onChange={handleChange}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="https://example.com/avatar.jpg"
+                  />
+                </div>
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter a URL for your profile image (optional)
+                </p>
+              </div>
+
+              {/* Username Field */}
+              <div className="mb-4">
+                <label
+                  htmlFor="username"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Username
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaUser className="text-gray-400" />
+                  </div>
+                  <input
+                    type="text"
+                    id="username"
+                    name="username"
+                    value={formData.username}
+                    onChange={handleChange}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Enter username"
+                    required
+                    minLength="3"
+                    maxLength="50"
+                  />
+                </div>
+              </div>
+
+              {/* Email Field */}
+              <div className="mb-6">
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
+                  Email
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <FaEnvelope className="text-gray-400" />
+                  </div>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                    placeholder="Enter email"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Buttons */}
+              <div className="flex space-x-3">
+                <button
+                  type="button"
+                  onClick={() => setIsEditing(false)}
+                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {loading ? "Saving..." : "Save Changes"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
