@@ -28,12 +28,6 @@ const Header = () => {
             Recipes
           </Link>
           <Link
-            to="/categories"
-            className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200"
-          >
-            Categories
-          </Link>
-          <Link
             to="/about"
             className="text-gray-700 hover:text-green-600 font-medium transition-colors duration-200"
           >
