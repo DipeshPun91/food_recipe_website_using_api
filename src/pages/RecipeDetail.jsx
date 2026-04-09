@@ -5,7 +5,6 @@ import {
   FaUtensils,
   FaGlobeAmericas,
   FaArrowLeft,
-  FaClock,
   FaUserFriends,
   FaRegBookmark,
   FaBookmark,
@@ -20,8 +19,7 @@ import {
   FaFire,
   FaCheckCircle,
 } from "react-icons/fa";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import Loading from "../component/ui/loading";
 
 const RecipeDetail = () => {
   const { id } = useParams();
@@ -151,9 +149,7 @@ const RecipeDetail = () => {
   };
 
   if (loading) {
-    return (
-      
-    );
+    return <Loading />;
   }
 
   if (error) {
