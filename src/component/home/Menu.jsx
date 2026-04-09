@@ -1,12 +1,9 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
-  FaYoutube,
   FaUtensils,
   FaGlobeAmericas,
   FaSearch,
   FaTimes,
-  FaStar,
-  FaRegStar,
   FaClock,
 } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
@@ -24,53 +21,64 @@ const Menu = () => {
   const [itemsPerPage] = useState(12);
   const navigate = useNavigate();
 
-  // Fetch meals with better performance
+  // Fetch meals with parallel requests for better performance
   useEffect(() => {
     const fetchMeals = async () => {
       try {
         setLoading(true);
+        const letters = [
+          "a",
+          "b",
+          "c",
+          "d",
+          "e",
+          "f",
+          "g",
+          "h",
+          "i",
+          "j",
+          "k",
+          "l",
+          "m",
+          "n",
+          "o",
+          "p",
+          "q",
+          "r",
+          "s",
+          "t",
+          "u",
+          "v",
+          "w",
+          "x",
+          "y",
+          "z",
+        ];
 
-        // Fetch popular meals instead of all letters for better performance
-        const response = await fetch(
-          "https://www.themealdb.com/api/json/v1/1/search.php?s=",
-        );
-        const data = await response.json();
-
-        if (data.meals) {
-          setFoodItems(data.meals);
-        } else {
-          // Fallback to category-based fetch
-          const categoryResponse = await fetch(
-            "https://www.themealdb.com/api/json/v1/1/categories.php",
-          );
-          const categoryData = await categoryResponse.json();
-
-          if (categoryData.categories) {
-            const mealsByCategory = await Promise.all(
-              categoryData.categories.slice(0, 5).map(async (category) => {
-                const res = await fetch(
-                  `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category.strCategory}`,
-                );
-                const data = await res.json();
-                return data.meals || [];
-              }),
+        // Create an array of fetch promises for parallel execution
+        const fetchPromises = letters.map(async (letter) => {
+          try {
+            const response = await fetch(
+              `https://www.themealdb.com/api/json/v1/1/search.php?f=${letter}`,
             );
-
-            const allMeals = mealsByCategory.flat().slice(0, 50);
-            // Fetch full details for each meal
-            const fullMeals = await Promise.all(
-              allMeals.map(async (meal) => {
-                const res = await fetch(
-                  `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`,
-                );
-                const data = await res.json();
-                return data.meals ? data.meals[0] : null;
-              }),
-            );
-
-            setFoodItems(fullMeals.filter((meal) => meal !== null));
+            const data = await response.json();
+            return data.meals || [];
+          } catch (error) {
+            console.error(`Error fetching letter ${letter}:`, error);
+            return [];
           }
-        }
+        });
+
+        // Wait for all fetches to complete in parallel
+        const allResults = await Promise.all(fetchPromises);
+        const allMeals = allResults.flat();
+
+        // Remove duplicates (in case same meal appears under different letters)
+        const uniqueMeals = Array.from(
+          new Map(allMeals.map((meal) => [meal.idMeal, meal])).values(),
+        );
+
+        setFoodItems(uniqueMeals);
       } catch (err) {
         console.error("Error fetching meals:", err);
         setError("Failed to load meals. Please try again later.");
@@ -82,7 +90,7 @@ const Menu = () => {
     fetchMeals();
   }, []);
 
-  // Extract unique categories and areas with useMemo for performance
+  // Extract unique categories and areas
   const { categories, areas } = useMemo(() => {
     const uniqueCategories = [
       "all",
@@ -95,7 +103,7 @@ const Menu = () => {
     return { categories: uniqueCategories, areas: uniqueAreas };
   }, [foodItems]);
 
-  // Filter and paginate items
+  // Filter items
   const filteredItems = useMemo(() => {
     return foodItems.filter((item) => {
       if (!item) return false;
@@ -112,7 +120,7 @@ const Menu = () => {
     });
   }, [foodItems, searchTerm, selectedCategory, selectedArea]);
 
-  // Pagination calculations
+  // Pagination
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -143,20 +151,24 @@ const Menu = () => {
       <div className="min-h-screen bg-gray-50 pt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <div className="text-center mb-12">
-            <Skeleton height={40} width={300} className="mx-auto mb-3" />
-            <Skeleton height={24} width={400} className="mx-auto" />
+            <div className="animate-pulse">
+              <div className="h-10 bg-gray-200 rounded-lg w-64 mx-auto mb-3"></div>
+              <div className="h-6 bg-gray-200 rounded-lg w-96 mx-auto"></div>
+            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, index) => (
+            {[...Array(12)].map((_, index) => (
               <div
                 key={index}
                 className="bg-white rounded-xl shadow-sm overflow-hidden"
               >
-                <Skeleton height={200} />
-                <div className="p-4">
-                  <Skeleton height={24} className="mb-2" />
-                  <Skeleton height={20} className="mb-4" />
-                  <Skeleton height={40} />
+                <div className="animate-pulse">
+                  <div className="bg-gray-200 h-48"></div>
+                  <div className="p-4">
+                    <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-4 bg-gray-200 rounded w-2/3 mb-4"></div>
+                    <div className="h-10 bg-gray-200 rounded"></div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -213,8 +225,8 @@ const Menu = () => {
             </span>
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore thousands of recipes from around the world. Find your next
-            favorite dish!
+            Explore {foodItems.length}+ recipes from around the world. Find your
+            next favorite dish!
           </p>
         </div>
 
@@ -227,7 +239,7 @@ const Menu = () => {
                 <FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search recipes by name, ingredient, or cuisine..."
+                  placeholder="Search recipes by name..."
                   className="w-full pl-12 pr-10 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all outline-none"
                   value={searchTerm}
                   onChange={(e) => {
@@ -415,46 +427,61 @@ const Menu = () => {
               {currentItems.map((food) => (
                 <div
                   key={food.idMeal}
-                  className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden cursor-pointer border border-gray-100 hover:border-green-200 transform hover:-translate-y-1"
+                  className="group relative bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
                   onClick={() => handleRecipeClick(food.idMeal)}
                 >
-                  <div className="relative h-48 overflow-hidden bg-gray-100">
+                  {/* Accent bar at top */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-green-500 to-emerald-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left z-10" />
+
+                  <div className="relative h-48 overflow-hidden">
                     <img
                       src={food.strMealThumb}
                       alt={food.strMeal}
                       loading="lazy"
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => {
                         e.target.src =
-                          "https://via.placeholder.com/300x200?text=No+Image";
+                          "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
-                  <div className="p-5">
-                    <div className="flex flex-wrap gap-1.5 mb-3">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-50 text-green-700">
-                        <FaUtensils className="mr-1 text-xs" />
+                  <div className="p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="text-md font-semibold text-gray-800 line-clamp-2 flex-1 min-h-[40px]">
+                        {food.strMeal}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded-full">
                         {food.strCategory || "Other"}
                       </span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700">
-                        <FaGlobeAmericas className="mr-1 text-xs" />
+                      <span className="text-xs px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full">
                         {food.strArea || "International"}
                       </span>
                     </div>
 
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-green-600 transition-colors">
-                      {food.strMeal}
-                    </h3>
-
-                    <div className="flex items-center justify-between mt-4 pt-3 border-t border-gray-100">
-                      <div className="flex items-center text-sm text-gray-500">
-                        <FaClock className="mr-1.5 text-green-600" />
+                    <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                      <div className="flex items-center text-xs text-gray-500">
+                        <FaClock className="mr-1 text-green-600 text-xs" />
                         <span>30-45 min</span>
                       </div>
-                      <button className="text-green-600 font-medium text-sm hover:text-green-700 transition-colors">
-                        View Recipe →
+                      <button className="text-green-600 text-sm font-medium flex items-center gap-1 group-hover:gap-2 transition-all duration-300">
+                        View Detail
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
                       </button>
                     </div>
                   </div>
