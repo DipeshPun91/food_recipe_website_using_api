@@ -4,6 +4,9 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
 import { apiRequest } from "../../services/api";
 
+const mono = { fontFamily: "'JetBrains Mono', monospace" };
+const serif = { fontFamily: "'Fraunces', serif", fontWeight: 600 };
+
 const SignUp = () => {
   const [formData, setFormData] = useState({
     username: "",
@@ -45,40 +48,44 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 flex flex-col">
-      <header className="bg-white py-4">
-        <div className="container mx-auto px-4">
-          <Link to="/" className="flex items-center">
-            <h1 className="text-2xl font-bold text-green-600">
-              Recipe<span className="text-amber-600">Hub</span>
+    <div className="min-h-screen bg-[#FAF3E7] flex flex-col">
+      <header className="py-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link to="/">
+            <h1 className="text-2xl text-[#2B2420]" style={serif}>
+              Recipe<span className="text-[#C1440E]">Hub</span>
             </h1>
           </Link>
         </div>
       </header>
-      <main className="flex-grow flex items-center justify-center py-12">
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full max-w-md border border-gray-200">
+
+      <main className="flex-grow flex items-center justify-center px-4 py-12">
+        <div className="bg-[#FFFBF3] rounded-sm border border-[#E4D9C5] shadow-sm w-full max-w-md">
           <div className="p-8">
-            <h2 className="text-3xl font-bold mb-6 text-center text-gray-900">
+            <h2
+              className="text-3xl text-[#2B2420] mb-6 text-center"
+              style={serif}
+            >
               Create Account
             </h2>
 
             {error && (
-              <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 text-center">
+              <div className="bg-[#C1440E]/5 border border-[#C1440E]/20 text-[#C1440E] px-4 py-3 rounded-sm mb-4 text-sm">
                 {error}
               </div>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div>
                 <label
                   htmlFor="username"
-                  className="block text-sm font-medium mb-2 text-gray-700"
+                  className="block text-sm font-medium text-[#2B2420] mb-2"
                 >
                   Username
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaUser className="text-gray-400" />
+                    <FaUser className="text-[#2B2420]/35" />
                   </div>
                   <input
                     type="text"
@@ -86,7 +93,7 @@ const SignUp = () => {
                     name="username"
                     value={formData.username}
                     onChange={handleChange}
-                    className="bg-gray-50 border border-gray-300 w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                    className="w-full pl-10 pr-3 py-3 bg-[#FAF3E7] border border-[#E4D9C5] rounded-sm focus:ring-2 focus:ring-[#C1440E]/40 focus:border-[#C1440E] transition-all outline-none text-[#2B2420] placeholder-[#2B2420]/35"
                     placeholder="Enter your username"
                     required
                   />
@@ -96,13 +103,13 @@ const SignUp = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium mb-2 text-gray-700"
+                  className="block text-sm font-medium text-[#2B2420] mb-2"
                 >
                   Email
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <MdEmail className="text-gray-400" />
+                    <MdEmail className="text-[#2B2420]/35" />
                   </div>
                   <input
                     type="email"
@@ -110,7 +117,7 @@ const SignUp = () => {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className="bg-gray-50 border border-gray-300 w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
+                    className="w-full pl-10 pr-3 py-3 bg-[#FAF3E7] border border-[#E4D9C5] rounded-sm focus:ring-2 focus:ring-[#C1440E]/40 focus:border-[#C1440E] transition-all outline-none text-[#2B2420] placeholder-[#2B2420]/35"
                     placeholder="your@email.com"
                     required
                   />
@@ -120,13 +127,13 @@ const SignUp = () => {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium mb-2 text-gray-700"
+                  className="block text-sm font-medium text-[#2B2420] mb-2"
                 >
                   Password
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <FaLock className="text-gray-400" />
+                    <FaLock className="text-[#2B2420]/35" />
                   </div>
                   <input
                     type="password"
@@ -134,8 +141,8 @@ const SignUp = () => {
                     name="password"
                     value={formData.password}
                     onChange={handleChange}
-                    className="bg-gray-50 border border-gray-300 w-full pl-10 pr-3 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-colors"
-                    placeholder="••••••••"
+                    className="w-full pl-10 pr-3 py-3 bg-[#FAF3E7] border border-[#E4D9C5] rounded-sm focus:ring-2 focus:ring-[#C1440E]/40 focus:border-[#C1440E] transition-all outline-none text-[#2B2420] placeholder-[#2B2420]/35"
+                    placeholder="At least 6 characters"
                     required
                     minLength="6"
                   />
@@ -145,19 +152,22 @@ const SignUp = () => {
               <button
                 type="submit"
                 disabled={isLoading}
-                className={`w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg font-medium transition-colors duration-200 ${
+                className={`w-full bg-[#C1440E] hover:bg-[#a3390b] text-[#FAF3E7] py-3 rounded-sm font-medium shadow-[3px_3px_0_0_#2B2420] transition-all hover:translate-x-0.5 hover:translate-y-0.5 ${
                   isLoading ? "opacity-70 cursor-not-allowed" : ""
                 }`}
+                style={mono}
               >
                 {isLoading ? "Creating Account..." : "Sign Up"}
               </button>
             </form>
 
-            <div className="mt-8 text-center text-sm text-gray-600">
-              Already have an account?{" "}
+            <div className="mt-6 text-center text-sm">
+              <span className="text-[#2B2420]/60">
+                Already have an account?{" "}
+              </span>
               <Link
                 to="/login"
-                className="text-green-600 hover:text-green-700 font-medium transition-colors duration-200"
+                className="text-[#C1440E] hover:text-[#a3390b] font-medium transition-colors"
               >
                 Sign in
               </Link>

@@ -31,15 +31,12 @@ const recipeSchema = new Schema(
       type: String,
       default: "",
     },
-    // ingredients: [
-    //   {
-    //     ingredient: String,
-    //     measure: String,
-    //   },
-    // ],
-    strIngredients: {
-      type: String,
-    },
+    strIngredients: [
+      {
+        ingredient: String,
+        measure: String,
+      },
+    ],
     strTags: {
       type: String,
       default: "",
@@ -54,6 +51,6 @@ const recipeSchema = new Schema(
   }
 );
 
-// recipeSchema.index({ strMeal: "text", strCategory: "text", strArea: "text" });
+recipeSchema.index({ strMeal: "text", strCategory: "text", strArea: "text" });
 
 export default mongoose.model("Recipe", recipeSchema);
