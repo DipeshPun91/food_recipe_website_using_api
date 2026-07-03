@@ -9,7 +9,7 @@ export const AuthContextProvider = ({ children }) => {
   );
 
   // to update the user
-  const updateUser = (data) => {  5
+  const updateUser = (data) => {
     setCurrentUser(data);
   };
 

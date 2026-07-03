@@ -15,7 +15,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://food-recipe-frontend-w3z3.onrender.com",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
