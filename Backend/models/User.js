@@ -73,8 +73,6 @@ const userSchema = new Schema(
 );
 
 // Indexes for better performance
-userSchema.index({ username: 1 });
-userSchema.index({ email: 1 });
 userSchema.index({ "wishlist.recipeId": 1 });
 userSchema.index({ "ratings.recipeId": 1 });
 

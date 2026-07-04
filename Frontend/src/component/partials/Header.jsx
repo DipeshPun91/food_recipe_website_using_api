@@ -1,6 +1,13 @@
 import React, { useState, useContext } from "react";
-import { Link } from "react-router-dom";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaBars,
+  FaTimes,
+  FaUser,
+  FaUtensils,
+  FaSignOutAlt,
+  FaChevronDown,
+} from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import defaultAvatar from "../../assets/default_user.png";
 
@@ -12,11 +19,25 @@ const navLinks = [
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { currentUser } = useContext(AuthContext);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { currentUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setDropdownOpen(false);
+  };
+
+  const handleMobileLogout = () => {
+    logout();
+    navigate("/");
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header className="bg-[#FAF3E7]/90 backdrop-blur-md fixed w-full z-50 border-b border-[#E4D9C5]">
-      <div className="container max-w-6xl mx-auto py-3 md:py-4 flex justify-between items-center">
+      <div className="container max-w-7xl mx-auto py-3 md:py-4 px-4 flex justify-between items-center">
         <Link to="/" className="flex items-baseline gap-0.5">
           <span
             className="text-2xl text-[#2B2420]"
@@ -48,18 +69,72 @@ const Header = () => {
 
         <div className="hidden md:flex items-center space-x-4">
           {currentUser ? (
-            <div className="flex items-center space-x-2">
-              <img
-                src={currentUser.avatar || defaultAvatar}
-                alt={`${currentUser.username}'s profile`}
-                className="w-9 h-9 rounded-full object-cover border-2 border-[#E4D9C5]"
-              />
-              <Link
-                to="/profile"
-                className="text-[#2B2420] hover:text-[#C1440E] font-medium transition-colors duration-200"
+            <div className="relative">
+              <button
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity focus:outline-none"
               >
-                {currentUser.username}
-              </Link>
+                <img
+                  src={currentUser.avatar || defaultAvatar}
+                  alt={`${currentUser.username}'s profile`}
+                  className="w-9 h-9 rounded-full object-cover border-2 border-[#E4D9C5]"
+                />
+                <span className="text-[#2B2420] font-medium text-sm hidden lg:inline">
+                  {currentUser.username}
+                </span>
+                <FaChevronDown
+                  className={`text-[#2B2420]/50 text-xs transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`}
+                />
+              </button>
+
+              {/* Dropdown Menu */}
+              {dropdownOpen && (
+                <div className="absolute right-0 mt-2 w-56 bg-[#FFFBF3] border border-[#E4D9C5] rounded-sm shadow-lg py-2 z-50">
+                  <div className="px-4 py-3 border-b border-[#E4D9C5]">
+                    <p
+                      className="text-sm font-medium text-[#2B2420]"
+                      style={{
+                        fontFamily: "'Fraunces', serif",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {currentUser.username}
+                    </p>
+                    <p
+                      className="text-xs text-[#2B2420]/50 truncate"
+                      style={{ fontFamily: "'JetBrains Mono', monospace" }}
+                    >
+                      {currentUser.email}
+                    </p>
+                  </div>
+
+                  <Link
+                    to="/profile"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#2B2420] hover:bg-[#FAF3E7] transition-colors"
+                  >
+                    <FaUser className="text-[#2B2420]/50" />
+                    <span>Profile</span>
+                  </Link>
+
+                  <Link
+                    to="/dashboard"
+                    onClick={() => setDropdownOpen(false)}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#2B2420] hover:bg-[#FAF3E7] transition-colors"
+                  >
+                    <FaUtensils className="text-[#2B2420]/50" />
+                    <span>Dashboard</span>
+                  </Link>
+
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-4 py-2.5 text-sm text-[#C1440E] hover:bg-[#FAF3E7] transition-colors w-full text-left border-t border-[#E4D9C5] mt-1 pt-2"
+                  >
+                    <FaSignOutAlt className="text-[#C1440E]" />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex items-center space-x-3">
@@ -88,6 +163,7 @@ const Header = () => {
         </button>
       </div>
 
+      {/* Mobile Menu */}
       <div
         className={`md:hidden ${
           mobileMenuOpen ? "block" : "hidden"
@@ -113,14 +189,36 @@ const Header = () => {
                 alt={`${currentUser.username}'s profile`}
                 className="w-8 h-8 rounded-full object-cover border border-[#E4D9C5]"
               />
-              <Link
-                to="/profile"
-                className="text-[#2B2420] font-medium transition-colors duration-200"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+              <span className="text-[#2B2420] font-medium">
                 {currentUser.username}
-              </Link>
+              </span>
             </div>
+
+            <Link
+              to="/profile"
+              className="flex items-center gap-3 py-3 px-2 text-[#2B2420] hover:bg-[#FFFBF3] rounded transition-colors duration-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <FaUser className="text-[#2B2420]/50" />
+              <span>Profile</span>
+            </Link>
+
+            <Link
+              to="/dashboard"
+              className="flex items-center gap-3 py-3 px-2 text-[#2B2420] hover:bg-[#FFFBF3] rounded transition-colors duration-200"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <FaUtensils className="text-[#2B2420]/50" />
+              <span>Dashboard</span>
+            </Link>
+
+            <button
+              onClick={handleMobileLogout}
+              className="flex items-center gap-3 py-3 px-2 text-[#C1440E] hover:bg-[#FFFBF3] rounded transition-colors duration-200 w-full border-t border-[#E4D9C5] mt-1 pt-3"
+            >
+              <FaSignOutAlt />
+              <span>Sign Out</span>
+            </button>
           </div>
         ) : (
           <div className="border-t border-[#E4D9C5] mt-2 pt-2 flex flex-col gap-2">

@@ -21,15 +21,30 @@ const SignIn = () => {
     setError("");
 
     try {
-      const res = await apiRequest.post("/auth/login/", {
+      const res = await apiRequest.post("/auth/login", {
         username,
         password,
       });
-      updateUser(res.data);
-      navigate("/");
+
+      if (res.data && res.data.data) {
+        updateUser(res.data.data);
+        navigate("/");
+      } else if (res.data && res.data._id) {
+        updateUser(res.data);
+        navigate("/");
+      } else if (res.data && res.data.user) {
+        updateUser(res.data.user);
+        navigate("/");
+      } else {
+        updateUser(res.data);
+        navigate("/");
+      }
     } catch (error) {
-      setError(error.response?.data?.msg || "Something went wrong");
-      console.log(error);
+      setError(
+        error.response?.data?.message ||
+          error.response?.data?.msg ||
+          "Something went wrong",
+      );
     } finally {
       setIsLoading(false);
     }

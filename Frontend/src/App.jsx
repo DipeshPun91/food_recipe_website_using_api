@@ -8,18 +8,19 @@ import RecipeDetail from "./pages/RecipeDetail";
 import SignIn from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
 import Profile from "./pages/Profile";
+import Dashboard from "./pages/Dashboard";
 const App = () => {
   return (
-
     <>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="/about" element={<About />} />
-          
+
           <Route path="/recipes" element={<Recipe />} />
           <Route path="/recipes/:id" element={<RecipeDetail />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Route>
 
         <Route path="/login" element={<SignIn />} />
