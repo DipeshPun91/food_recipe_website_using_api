@@ -35,9 +35,9 @@ const columns = [
 
 const Footer = () => {
   return (
-    <footer className="bg-[#2B2420] text-[#FAF3E7] pt-16 pb-8">
-      <div className="container max-w-6xl mx-auto py-3 md:py-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+    <footer className="bg-[#2B2420] text-[#FAF3E7] border-t border-[#E4D9C5]/20">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Brand card */}
           <div>
             <div className="flex items-baseline gap-0.5 mb-4">
@@ -55,7 +55,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-[#FAF3E7]/60 mb-5 leading-relaxed">
-              Your ultimate cooking companion — thousands of recipes, cooking
+              Your ultimate cooking companion thousands of recipes, cooking
               tips, and meal planning tools to inspire your kitchen adventures.
             </p>
             <div className="flex space-x-3">
@@ -130,7 +130,8 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-[#FAF3E7]/10 text-center text-[#FAF3E7]/40 text-sm">
+        {/* Bottom Bar */}
+        <div className="pt-8 mt-8 border-t border-[#FAF3E7]/10 text-center text-[#FAF3E7]/40 text-sm">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="mb-4 md:mb-0">
               &copy; {new Date().getFullYear()} RecipeHub. All culinary rights

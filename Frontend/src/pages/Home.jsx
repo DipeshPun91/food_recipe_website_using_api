@@ -76,9 +76,9 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-[#FAF3E7]">
       {/* HERO */}
-      <section className="pt-32 pb-20 px-4 overflow-hidden">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+      <section className="pt-32 pb-20">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left: copy + search */}
             <div>
               <span
@@ -196,11 +196,8 @@ const Home = () => {
       <Popular />
 
       {/* FEATURES */}
-      <section
-        id="features"
-        className="py-20 bg-[#FFFBF3] border-y border-[#E4D9C5]"
-      >
-        <div className="container max-w-6xl mx-auto py-3 md:py-4">
+      <section className="py-20 bg-[#FFFBF3] border-y border-[#E4D9C5]">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
             <span
               className="inline-block text-xs tracking-[0.25em] text-[#C1440E] mb-3"
@@ -247,8 +244,8 @@ const Home = () => {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="py-20 lg:py-24 bg-[#FAF3E7]">
-        <div className="container max-w-6xl mx-auto py-3 md:py-4">
+      <section className="py-20 bg-[#FAF3E7]">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-14">
             <span
               className="inline-block text-xs tracking-[0.25em] text-[#C1440E] mb-3"
@@ -319,8 +316,8 @@ const Home = () => {
       </section>
 
       {/* CTA */}
-      <section className="relative py-20 md:py-24 bg-[#2B2420] text-[#FAF3E7] overflow-hidden">
-        <div className="container mx-auto px-4 sm:px-6 relative z-10">
+      <section className="py-20 bg-[#2B2420] text-[#FAF3E7] overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-3xl mx-auto text-center">
             <span
               className="inline-block text-xs tracking-[0.25em] text-[#D9A441] mb-5"

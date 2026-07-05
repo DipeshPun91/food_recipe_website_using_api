@@ -210,9 +210,13 @@ const About = () => {
           <div className="relative">
             <div className="bg-[#FFFBF3] rounded-sm border border-[#E4D9C5] overflow-hidden shadow-sm">
               <img
-                src="https://images.unsplash.com/photo-1547592180-85f173990554"
+                src="https://images.unsplash.com/photo-1547592180-85f173990554?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                 alt="Chef preparing food"
                 className="w-full h-[400px] object-cover"
+                onError={(e) => {
+                  e.target.src =
+                    "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
+                }}
               />
             </div>
             <div className="absolute -bottom-4 -right-4 bg-[#C1440E] p-4 rounded-sm shadow-[3px_3px_0_0_#2B2420] hidden lg:block">
@@ -338,8 +342,8 @@ const About = () => {
               flavors and improving their skills with RecipeHub.
             </p>
             <button
-              onClick={() => navigate("/")}
-              className="inline-flex items-center gap-2 bg-[#C1440E] text-[#FAF3E7] hover:bg-[#a3390b] font-semibold px-8 py-4 rounded-sm shadow-[3px_3px_0_0_#D9A441] transition-all hover:translate-x-0.5 hover:translate-y-0.5"
+              onClick={() => navigate("/recipes")}
+              className="inline-flex items-center gap-2 bg-[#C1440E] text-[#FAF3E7] hover:bg-[#a3390b] font-semibold px-8 py-4 rounded-sm shadow-[3px_3px_0_0_#D9A441] hover:shadow-[1.5px_1.5px_0_0_#D9A441] transition-all hover:translate-x-0.5 hover:translate-y-0.5"
               style={mono}
             >
               Explore Recipes
