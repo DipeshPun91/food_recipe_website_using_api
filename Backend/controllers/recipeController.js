@@ -14,7 +14,6 @@ export const getAllRecipes = async (req, res) => {
       sortOrder = "desc",
     } = req.query;
 
-    // Build filter
     const filter = { isPublic: true };
     if (category) filter.strCategory = category;
     if (area) filter.strArea = area;
@@ -22,7 +21,6 @@ export const getAllRecipes = async (req, res) => {
       filter.$text = { $search: search };
     }
 
-    // Build sort
     const sort = {};
     if (sortBy === "rating") {
       sort.averageRating = sortOrder === "desc" ? -1 : 1;
@@ -144,7 +142,6 @@ export const updateRecipe = async (req, res) => {
       });
     }
 
-    // Check if user is the creator
     if (recipe.createdBy.toString() !== req.userId) {
       return res.status(403).json({
         success: false,
@@ -188,7 +185,6 @@ export const deleteRecipe = async (req, res) => {
       });
     }
 
-    // Check if user is the creator
     if (recipe.createdBy.toString() !== req.userId) {
       return res.status(403).json({
         success: false,
@@ -218,7 +214,6 @@ export const addToWishlist = async (req, res) => {
     const { recipeId } = req.body;
     const userId = req.userId;
 
-    // Check if recipe exists
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({
@@ -227,7 +222,6 @@ export const addToWishlist = async (req, res) => {
       });
     }
 
-    // Check if already in wishlist
     const user = await User.findById(userId);
     const existingWishlistItem = user.wishlist.find(
       (item) => item.recipeId.toString() === recipeId,
@@ -240,7 +234,6 @@ export const addToWishlist = async (req, res) => {
       });
     }
 
-    // Add to wishlist
     user.wishlist.push({
       recipeId,
       addedAt: new Date(),
@@ -340,7 +333,6 @@ export const rateRecipe = async (req, res) => {
     const { rating } = req.body;
     const userId = req.userId;
 
-    // Validate rating
     if (!rating || rating < 1 || rating > 5) {
       return res.status(400).json({
         success: false,
@@ -348,7 +340,6 @@ export const rateRecipe = async (req, res) => {
       });
     }
 
-    // Check if recipe exists
     const recipe = await Recipe.findById(recipeId);
     if (!recipe) {
       return res.status(404).json({
@@ -357,18 +348,15 @@ export const rateRecipe = async (req, res) => {
       });
     }
 
-    // Find user
     const user = await User.findById(userId);
     const existingRatingIndex = user.ratings.findIndex(
       (r) => r.recipeId.toString() === recipeId,
     );
 
     if (existingRatingIndex !== -1) {
-      // Update existing rating
       user.ratings[existingRatingIndex].rating = rating;
       user.ratings[existingRatingIndex].ratedAt = new Date();
     } else {
-      // Add new rating
       user.ratings.push({
         recipeId,
         rating,
@@ -458,12 +446,10 @@ export const getRecipeStats = async (req, res) => {
       });
     }
 
-    // Get users who have this recipe in wishlist
     const wishlistUsers = await User.countDocuments({
       "wishlist.recipeId": id,
     });
 
-    // Get users who rated this recipe
     const ratingUsers = await User.countDocuments({
       "ratings.recipeId": id,
     });
@@ -483,6 +469,91 @@ export const getRecipeStats = async (req, res) => {
       success: false,
       message: "Server error while fetching recipe stats",
       error: process.env.NODE_ENV === "development" ? error.message : undefined,
+    });
+  }
+};
+
+// ===== USER SPECIFIC ROUTES =====
+
+// Get user's recipes
+export const getUserRecipes = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (userId !== req.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "You don't have permission to view this user's recipes",
+      });
+    }
+
+    const recipes = await Recipe.find({ createdBy: userId }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+      data: recipes,
+    });
+  } catch (error) {
+    console.error("Error fetching user recipes:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching user recipes",
+    });
+  }
+};
+
+// Get user's wishlist with full recipe details
+export const getUserWishlist = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (userId !== req.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "You don't have permission to view this user's wishlist",
+      });
+    }
+
+    const user = await User.findById(userId).populate("wishlist.recipeId");
+
+    res.status(200).json({
+      success: true,
+      data: user.wishlist,
+    });
+  } catch (error) {
+    console.error("Error fetching user wishlist:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching wishlist",
+    });
+  }
+};
+
+// Get user's ratings with full recipe details
+export const getUserRatings = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    if (userId !== req.userId) {
+      return res.status(403).json({
+        success: false,
+        message: "You don't have permission to view this user's ratings",
+      });
+    }
+
+    const user = await User.findById(userId).populate("ratings.recipeId");
+
+    res.status(200).json({
+      success: true,
+      data: user.ratings,
+    });
+  } catch (error) {
+    console.error("Error fetching user ratings:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server error while fetching ratings",
     });
   }
 };

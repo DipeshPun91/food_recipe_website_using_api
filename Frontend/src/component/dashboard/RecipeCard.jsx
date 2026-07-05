@@ -1,20 +1,57 @@
 import React from "react";
-import { FaClock, FaGlobeAmericas } from "react-icons/fa";
+import {
+  FaClock,
+  FaGlobeAmericas,
+  FaEdit,
+  FaTrash,
+  FaHeart,
+  FaRegHeart,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
 const mono = { fontFamily: "'JetBrains Mono', monospace" };
 const serif = { fontFamily: "'Fraunces', serif", fontWeight: 600 };
 
-const RecipeCard = ({ recipe, className = "", onClick }) => {
+const RecipeCard = ({
+  recipe,
+  className = "",
+  onClick,
+  onEdit,
+  onDelete,
+  onWishlistToggle,
+  isInWishlist,
+  showActions = false,
+  showWishlistButton = false,
+}) => {
   const navigate = useNavigate();
 
-  const handleClick = () => {
+  const handleClick = (e) => {
+    // Don't navigate if clicking on action buttons
+    if (e.target.closest(".action-buttons")) return;
+
     if (onClick) {
       onClick(recipe._id);
     } else {
-      navigate(`/recipes/${recipe._id}`);
+      navigate(`/menu/${recipe._id}`);
     }
   };
+
+  const handleEdit = (e) => {
+    e.stopPropagation();
+    if (onEdit) onEdit(recipe);
+  };
+
+  const handleDelete = (e) => {
+    e.stopPropagation();
+    if (onDelete) onDelete(recipe._id);
+  };
+
+  const handleWishlist = (e) => {
+    e.stopPropagation();
+    if (onWishlistToggle) onWishlistToggle(recipe._id);
+  };
+
+  const isRecipeInWishlist = isInWishlist ? isInWishlist(recipe._id) : false;
 
   return (
     <div
@@ -35,8 +72,48 @@ const RecipeCard = ({ recipe, className = "", onClick }) => {
               "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80";
           }}
         />
-        {/* Gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#2B2420]/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+        {/* Action Buttons Overlay */}
+        {(showActions || showWishlistButton) && (
+          <div className="absolute top-2 right-2 flex gap-1 action-buttons">
+            {showWishlistButton && (
+              <button
+                onClick={handleWishlist}
+                className="p-2 bg-[#FFFBF3]/90 hover:bg-[#FFFBF3] rounded-sm shadow-md transition-all"
+                aria-label={
+                  isRecipeInWishlist
+                    ? "Remove from wishlist"
+                    : "Add to wishlist"
+                }
+              >
+                {isRecipeInWishlist ? (
+                  <FaHeart className="h-4 w-4 text-[#C1440E]" />
+                ) : (
+                  <FaRegHeart className="h-4 w-4 text-[#2B2420]/60" />
+                )}
+              </button>
+            )}
+            {showActions && onEdit && (
+              <button
+                onClick={handleEdit}
+                className="p-2 bg-[#FFFBF3]/90 hover:bg-[#FFFBF3] rounded-sm shadow-md transition-all"
+                aria-label="Edit recipe"
+              >
+                <FaEdit className="h-4 w-4 text-[#4B6B3A]" />
+              </button>
+            )}
+            {showActions && onDelete && (
+              <button
+                onClick={handleDelete}
+                className="p-2 bg-[#FFFBF3]/90 hover:bg-[#FFFBF3] rounded-sm shadow-md transition-all"
+                aria-label="Delete recipe"
+              >
+                <FaTrash className="h-4 w-4 text-[#C1440E]" />
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="p-4">

@@ -63,13 +63,13 @@ const Dashboard = () => {
       setLoading(true);
 
       const recipesRes = await apiRequest.get(`/users/${userId}/recipes`);
-      setRecipes(recipesRes.data.data || []);
+      setRecipes(recipesRes.data?.data || recipesRes.data || []);
 
       const wishlistRes = await apiRequest.get(`/users/${userId}/wishlist`);
-      setWishlist(wishlistRes.data.data || []);
+      setWishlist(wishlistRes.data?.data || wishlistRes.data || []);
 
       const ratingsRes = await apiRequest.get(`/users/${userId}/ratings`);
-      setRatings(ratingsRes.data.data || []);
+      setRatings(ratingsRes.data?.data || ratingsRes.data || []);
 
       setError(null);
     } catch (err) {
@@ -415,6 +415,7 @@ const Dashboard = () => {
                       onDelete={handleDeleteRecipe}
                       onWishlistToggle={handleWishlistToggle}
                       isInWishlist={isInWishlist}
+                      showActions={true}
                     />
                   ))}
                 </div>
